@@ -19,6 +19,12 @@ Expo SDK 58, React Native 0.88, Expo Router, TypeScript.
 
 Навигация: нативные вкладки (`NativeTabs`: UITabBarController / BottomNavigationView) и стеки с модальным пропуском; в web-сборке — нижняя панель с учётом safe-area. Тач-цели ≥ 44–48 pt, светлая и тёмная тема, подписи для скринридеров (`accessibilityRole`, `accessibilityLabel`, live-регионы).
 
+## Демо в облаке
+
+- Web-сборка приложения (PWA-превью): https://campusmeet-mobile.vercel.app
+- API: https://campusmeet-api.onrender.com/api/v1 (бесплатный тариф Render засыпает без запросов — первый запрос может идти ~30 с)
+- Expo Go с облачным API: `EXPO_PUBLIC_API_BASE_URL=https://campusmeet-api.onrender.com/api/v1 npx expo start --tunnel`
+
 ## Installation
 
 Node.js 20+, Expo Go на телефоне (SDK 58) или эмулятор. API — [CampusMeet-Server](https://github.com/fpmi-hci-2026/CampusMeet-Server).

@@ -46,13 +46,21 @@
           "backgroundColor": "#ffffff",
           "image": "./assets/images/splash-icon.png",
           "imageWidth": 96,
-          "dark": { "backgroundColor": "#0f172a", "image": "./assets/images/splash-icon-dark.png" }
+          "dark": {
+            "backgroundColor": "#0f172a",
+            "image": "./assets/images/splash-icon-dark.png"
+          }
         }
       ]
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "2e5e1054-72fd-4d76-833d-a508d092811b"
+      }
     }
   }
 }
