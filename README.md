@@ -21,6 +21,7 @@ Expo SDK 58, React Native 0.88, Expo Router, TypeScript.
 
 ## Демо в облаке
 
+- Android APK (EAS, профиль `preview`, облачный API): [страница сборки](https://expo.dev/accounts/silkfinik/projects/campusmeet/builds/92541cba-a1b6-484e-9b1c-236ed9a96f0b), [скачать APK](https://expo.dev/artifacts/eas/A2SCbI63nes-gG3LCg0EuCpFZm3hiLPuMwtDerewkt0.apk)
 - Web-сборка приложения (PWA-превью): https://campusmeet-mobile.vercel.app
 - API: https://campusmeet-api.onrender.com/api/v1 (бесплатный тариф Render засыпает без запросов — первый запрос может идти ~30 с)
 - Expo Go с облачным API: `EXPO_PUBLIC_API_BASE_URL=https://campusmeet-api.onrender.com/api/v1 npx expo start --tunnel`
