@@ -1,0 +1,86 @@
+# CampusMeet-Mobile CI (Lab 8): quality gate + tests → JS bundles for iOS/Android/Web (+ optional EAS build).
+name: Mobile CI
+on:
+  push:
+    branches: [main, develop, lab8]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Code quality (ESLint, TypeScript, Vitest, expo-doctor, Semgrep, SonarCloud*)
+    runs-on: ubuntu-latest
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_ORGANIZATION: ${{ vars.SONAR_ORGANIZATION }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - name: Expo doctor (SDK-compatible dependency versions)
+        run: npx expo-doctor
+      - name: Semgrep SAST (blocking)
+        run: pipx run semgrep scan --config p/default --config p/react --metrics=off --error --exclude node_modules --exclude dist
+      - name: SonarCloud quality gate (runs when SONAR_TOKEN is configured)
+        if: env.SONAR_TOKEN != ''
+        uses: SonarSource/sonarqube-scan-action@70bad232163b09d998ea0707ee80c0ec80798c16 # v8.5.1
+        with:
+          args: >-
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.organization=${{ env.SONAR_ORGANIZATION }}
+            -Dsonar.qualitygate.wait=true
+
+  bundle:
+    name: Bundles iOS / Android / Web
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Hermes bundles for iOS and Android (catches native-only import errors)
+        run: npx expo export --platform ios --platform android --output-dir dist-native
+      - name: Web build (PWA preview)
+        run: npx expo export --platform web
+        env:
+          EXPO_PUBLIC_API_BASE_URL: ${{ vars.PUBLIC_API_URL || 'http://127.0.0.1:8000/api/v1' }}
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: web-build
+          path: dist
+
+  eas:
+    name: EAS preview build (Android APK, when EXPO_TOKEN is configured)
+    needs: bundle
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Queue EAS build
+        if: env.EXPO_TOKEN != ''
+        run: npx eas-cli@latest build --platform android --profile preview --non-interactive --no-wait
+      - if: env.EXPO_TOKEN == ''
+        run: echo "::notice::EXPO_TOKEN is not set — EAS build skipped"
