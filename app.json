@@ -19,7 +19,10 @@
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA"
+      ]
     },
     "web": {
       "output": "single",
@@ -58,9 +61,15 @@
       "typedRoutes": true,
       "reactCompiler": true
     },
+    "owner": "silkfinik",
     "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
       "eas": {
-        "projectId": "2e5e1054-72fd-4d76-833d-a508d092811b"
+        "projectId": "8e96b570-e490-49c7-895c-3385f48c3c24"
       }
     }
   }
