@@ -1,0 +1,58 @@
+{
+  "expo": {
+    "name": "CampusMeet",
+    "slug": "campusmeet",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "campusmeet",
+    "userInterfaceStyle": "automatic",
+    "description": "Афиша мероприятий ФПМИ БГУ: регистрация, QR-пропуск офлайн, личная программа и сканер для волонтёров.",
+    "ios": {
+      "bundleIdentifier": "by.bsu.fpmi.campusmeet",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "by.bsu.fpmi.campusmeet",
+      "adaptiveIcon": {
+        "backgroundColor": "#0d0d0d",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "single",
+      "favicon": "./assets/images/favicon.png",
+      "name": "CampusMeet",
+      "shortName": "CampusMeet",
+      "lang": "ru",
+      "themeColor": "#0d0d0d",
+      "backgroundColor": "#ffffff"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Камера нужна волонтёру, чтобы сканировать QR-коды билетов на входе.",
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#ffffff",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 96,
+          "dark": { "backgroundColor": "#0f172a", "image": "./assets/images/splash-icon-dark.png" }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
